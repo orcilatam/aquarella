@@ -77,3 +77,14 @@ git reset --hard paso-3
 ```
 
 Se agrega una llamada a `runSonarQube` en el `Jenkinsfile`.  Hacer clic en *Build Now* en Jenkins para ejecutar el pipeline. Una vez finalizado el pipeline, el reporte de calidad se puede observar en http://localhost:9000/
+
+## Paso 4 — Ejecución de tests funcionales con Selenium
+
+Para los tests de UI se recomienda usar identificadores únicos en el HTML. Con esto se simplifican los tests funcionales de Selenium.
+
+```sh
+git checkout master
+git reset --hard paso-4
+```
+
+La ejecución de este paso requiere su propio pipeline. Por favor, [continúe aquí](https://github.com/orcilatam/selenium/) para completar el ejercicio.
