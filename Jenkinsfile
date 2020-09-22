@@ -8,6 +8,7 @@ def registry = 'artifactory:8082/docker-local'
 def registryId = 'registry-push-user'
 def kubeConfig = 'kubeconfig-multivac'
 def kubeNamespace = 'default'
+def ingressName = 'aquarella'
 
 pipeline {
   agent any
@@ -70,6 +71,23 @@ pipeline {
 
           deployToKubernetes(this, kubeConfig, kubeNamespace, 'deployment.yaml')
           deployToKubernetes(this, kubeConfig, kubeNamespace, 'service.yaml')
+        }
+      }
+    }
+
+    stage('Instalación de LoadBalancer e Ingress Controller') {
+      steps {
+        script {
+          updateHelmRepositories(this)
+          installNginxIngressController(this, kubeConfig, kubeNamespace, ingressName)
+        }
+      }
+    }
+
+    stage('Configuración de Ingress') {
+      steps {
+        script {
+          deployToKubernetes(this, kubeConfig, kubeNamespace, 'ingress.yaml')
         }
       }
     }

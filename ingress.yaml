@@ -1,0 +1,12 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-portal-aquarella
+spec:
+  rules:
+  - host: aquarella.parroquiano.info
+    http:
+      paths:
+      - backend:
+          serviceName: {{ project.name }}
+          servicePort: 80
