@@ -88,3 +88,24 @@ git reset --hard paso-4
 ```
 
 La ejecución de este paso requiere su propio pipeline. Por favor, [continúe aquí](https://github.com/orcilatam/selenium/) para completar el ejercicio.
+
+## Paso 5 — Creación de artefacto y construción de imagen Docker
+
+En términos generales, un _artefacto_ es un objeto binario que representa una aplicación, librería u otro recurso de una aplicación. Un artefacto consiste generalmente de un único archivo binario comprimido. Por ejemplo, para Java los packages `.jar`, `.ear` y `.war` se consideran artefactos.
+
+Un artefacto tiene, además de un nombre, una *etiqueta* generalmente asociada con su número de versión. De esta manera es posible tener el mismo artefacto con distintas versiones.
+
+Una imagen de Docker es simplemente un artefacto que representa una máquina virtual muy ligera. Para este curso, construiremos una imagen de Docker simple que contendrá:
+
+- Un sistema operativo Debian mínimo (“slim”)
+- La JDK 11, que incluye el servidor JSP Tomcat, para ejecutar archivos `.war`
+- El package `.war` con el portal de Aquarella
+
+Para ver estos cambios:
+
+```sh
+git checkout master
+git reset --hard paso-5
+```
+
+Se agrega una llamada a `buildDockerImage` en el `Jenkinsfile`.  Hacer clic en *Build Now* en Jenkins para ejecutar el pipeline.
