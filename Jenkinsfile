@@ -30,6 +30,14 @@ pipeline {
       }
     }
 
+    stage('OWASP Dependency Check') {
+      steps {
+        script {
+          runOWASPDependencyChecks(this, 'target')
+        }
+      }
+    }
+
     stage('Calidad de código') {
       steps {
         script {

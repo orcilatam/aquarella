@@ -32,3 +32,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### OWASP Dependency Check reports ###
+dependency-check-report.*
