@@ -2,6 +2,8 @@
 import static com.orcilatam.devops.Const.*
 import static com.orcilatam.devops.Stage.*
 
+def sonarqube = 'sonarqube:9000'
+
 pipeline {
   agent any
 
@@ -18,6 +20,14 @@ pipeline {
       steps {
         script {
           testJUnit(this)   /* mvn test */
+        }
+      }
+    }
+
+    stage('Calidad de código') {
+      steps {
+        script {
+          runSonarQube(this, sonarqube)
         }
       }
     }

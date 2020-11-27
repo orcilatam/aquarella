@@ -64,3 +64,18 @@ Se agrega un pipeline básico en un nuevo archivo archivo  `Jenkinsfile`; éste 
 Se agrega en Jenkins un job del tipo *Multibranch pipeline* que apunte al repositorio de Aquarella.
 
 Finalmente, hacer clic en *Build Now* en Jenkins.
+
+## Paso 3 — Revisión de calidad de código con SonarQube
+
+Asumiendo que tenemos **SonarQube** instalado y correctamente configurado, podemos usarlo para revisar la calidad del código fuente de la aplicación.
+
+SonarQube está preinstalado, acceda a él en http://localhost:9000/
+
+Para ver el código de este paso:
+
+```sh
+git checkout master
+git reset --hard paso-3
+```
+
+Se agrega una llamada a `runSonarQube` en el `Jenkinsfile`.  Hacer clic en *Build Now* en Jenkins para ejecutar el pipeline. Una vez finalizado el pipeline, el reporte de calidad se puede observar en http://localhost:9000/
