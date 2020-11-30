@@ -1,5 +1,5 @@
-# Usar como base una imagen de Debian con Java 11 preinstalado
-FROM openjdk:11-jre-slim
+# Usar como base una imagen de Debian con Java 8 preinstalado
+FROM openjdk:8-jre-slim
 
 # El puerto de EXPOSE es meramente informativo
 # (no expone realmente)
