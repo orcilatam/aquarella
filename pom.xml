@@ -10,7 +10,7 @@
   </parent>
   <groupId>com.aquarella</groupId>
   <artifactId>portal-aquarella-marco</artifactId>
-  <name>portal-aquarella</name>
+  <name>portal-aquarella-marco</name>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>war</packaging>
   <description>Portal web del Banco Aquarella</description>
