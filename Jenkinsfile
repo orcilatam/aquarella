@@ -13,7 +13,7 @@ pipeline {
     stage('Compilación') {
       steps {
         script {
-          buildMaven(this)
+          buildMaven(this)  /* mvn clean compile */
         }
       }
     }
@@ -21,7 +21,7 @@ pipeline {
     stage('Tests unitarios') {
       steps {
         script {
-          testJUnit(this)
+          testJUnit(this)   /* mvn test */
         }
       }
     }
