@@ -1,5 +1,7 @@
 # Portal del Banco Aquarella
 
+Este es un cambio trivial.
+
 Esta es la rama de Ana.
 
 ![Banco Aquarella](https://raw.githubusercontent.com/orcilatam/aquarella/master/src/main/resources/static/img/banco-aquarella.png)
