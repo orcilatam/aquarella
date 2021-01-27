@@ -243,3 +243,62 @@ git reset --hard paso-12
 Hacer clic en *Build Now* en Jenkins para ejecutar el pipeline.
 
 Las notificaciones se envían al canal de Slack configurado en Jenkins.
+
+## Paso adicional 13 — EFK (Elasticsearch, Fluentd, Kibana)
+
+**Elasticsearch** es una maquinaria de búsqueda, con un base de datos incorporada especializada en texto. Permite almacenar, catalogar y buscar en grandes volúmenes de texto. Usualmente se usa capturar logs de sistemas y aplicaciones, y hacer búsquedas en éstos. **Kibana** es un herramienta de visualización de datos y de creación de _dashboards_ o paneles de información visual. En conjunto con Elasticsearch, provee una manera de analizar y visualizar logs. **Fluentd** es un utilitario recolector de datos. Funciona como un agente incrustado en un cluster de Kubernetes que extrae los logs del cluster y de los pods desplegados en éste, y los envía a una instancia de Elasticsearch para su procesamiento.
+
+Elasticsearch, Fluentd y Kibana se usan casi siempre juntos, al punto que esta combinación se la considera una unidad y se la conoce como EFK. Históricamente, antes de Fluentd existía un producto llamado **Logstash** (por lo tanto antes se hablaba de ELK) que hacía las funciones de Fluentd. Sin embargo, debido a la superioridad técnica de Fluentd, este está remplazando a Logstash.
+
+Nótese que EFK se considera como parte de la infraestructura del cluster, así que _no_ es parte del pipeline de CI/CD, pero sí podría ser considerado parte del IaC.
+
+Para ver cómo desplegar EFK dentro de un cluster:
+
+```sh
+git checkout master
+git reset --hard paso-13
+```
+Elasticsearch se despliega en uno o más pods (es decir, un _cluster de pods_ de Elasticsearch) configurados como un **StatefulSet**. Un StafulSet es simplemente un Deployment que anticipamos que _no_ va ser efímero, por lo cual Kubernetes realiza dos cosas:
+
+- Los nombres generados de los pods no son cuasialeatorios, sino que siguen una secuencia numérica ordenada; es decir que los nombres son predecibles, lo cual permite referenciarlos a priori antes de desplegarlos.
+- Kubernetes le permite a los pods solicitar volúmenes de escritura permanente (**volumeClaim**); éstos son simplemente espacios de almacenamiento persistente (sistemas de archivo) fuera de Kubernetes, que el StatefulSet puede usar para guardar su estado, de manera que éste se mantenga aún cuando los pods dejen de existir.
+
+Adicionalmente, es necesario desplegar un **Service** para abstraer el cluster de pods de Elasticsearch en una entidad abstracta.
+
+Para desplegar Elasticsearch:
+
+```sh
+kubectl apply -f elasticsearch.yaml
+```
+
+Esto levanta una instancia de Elasticsearch _dentro_ del cluster de Kubernetes. Elasticsearch es accesible vía un API REST. Si hacemos un port forwarding al puerto 9200 de localhost:
+
+```sh
+./elasticsearch 9200
+```
+
+Podemos abrir en un navegador `http://localhost:9200/_cluster/state?pretty`  y ver cómo responde Elasticsearch.  Usar `Ctrl+C` para detener el port forwarding.
+
+Para instalar una instancia de Kibana:
+
+```sh
+kubectl apply -f kibana.yaml
+```
+
+Nótese que Kibana se despliega en forma tradicional: un Deployment y un Service asociado.
+
+Si hacemos un port forwarding al puerto 5601 de localhost podemos ver la UI:
+
+```sh
+./kibana 5601
+```
+
+Abrir en el navegador: `http://localhost:5601/`.  Usar Ctrl+C para detener el port forwarding.
+
+Finalmente, para desplegar Fluentd es necesario crear un **ServiceAccount** dentro de Kubernetes, asociarle un **ClusterRole** a este ServiceAccount para que puede leer datos de logs del cluster (y logs de aplicaciones dentro de los pods), y desplegar Fluentd como un **DaemonSet**. Un DaemonSet es simplemente un tipo de pod que se levanta y "adjunta" automáticamente a todos los nodos del cluster (uno por cada nodo). A medida que más nodos entran o salen del cluster, Kubernetes se asegura de crear o bajar los pods adjuntos de los DaemonSets. Los DaemonSets son ideales para crear servicios adicionales disponibles en cada nodo, sin necesidad de usar nodos especiales.
+
+Para instalar Fluentd en todos los nodos de nuestro cluster:
+
+```sh
+kubectl apply -f fluentd.yaml
+

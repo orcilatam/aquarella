@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+POD=kibana
+
+kubectl port-forward $( kubectl  get pods | grep $POD | cut -d ' ' -f 1 )  $1:5601

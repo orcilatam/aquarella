@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+kubectl port-forward es-cluster-0 $1:9200
