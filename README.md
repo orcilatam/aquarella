@@ -301,4 +301,8 @@ Para instalar Fluentd en todos los nodos de nuestro cluster:
 
 ```sh
 kubectl apply -f fluentd.yaml
+```
 
+---
+
+Copyright &copy; 2021 Marco Bravo, con licencia [GPL v3](LICENSE)
